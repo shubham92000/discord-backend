@@ -35,5 +35,5 @@ public class Conversation {
     @LastModifiedDate
     private LocalDateTime lastModifiedOn;
 
-    Conversation(){}
+    public Conversation(){}
 }

@@ -33,9 +33,9 @@ public class FriendInvitation {
     @LastModifiedDate
     private LocalDateTime lastModifiedOn;
 
-    FriendInvitation(){}
+    public FriendInvitation(){}
 
-    FriendInvitation(User senderId, User receiverId){
+    public FriendInvitation(User senderId, User receiverId){
         this.senderId = senderId;
         this.receiverId = receiverId;
     }

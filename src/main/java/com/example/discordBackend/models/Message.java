@@ -34,7 +34,7 @@ public class Message {
     @LastModifiedDate
     private LocalDateTime lastModifiedOn;
 
-    Message(){}
+    public Message(){}
 
     public Message(String content, User author, String type) {
         this.content = content;

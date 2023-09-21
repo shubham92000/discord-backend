@@ -1,5 +1,6 @@
 package com.example.discordBackend.models;
 
+import com.example.discordBackend.utils.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +31,11 @@ public class User {
     @Indexed(unique = true)
     private String username;
 
+    private String name;
+
     private String password;
+
+    private List<Role> roles;
 
     @DocumentReference
     private List<User> friends = new ArrayList<>();
@@ -41,7 +46,7 @@ public class User {
     @LastModifiedDate
     private LocalDateTime lastModifiedOn;
 
-    User(){}
+    public User(){}
 
     public User(String email, String username, String password) {
         this.email = email;
