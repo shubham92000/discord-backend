@@ -1,5 +1,6 @@
 package com.example.discordBackend.controllers;
 
+import com.example.discordBackend.dtos.ApiResponse;
 import com.example.discordBackend.dtos.auth.*;
 import com.example.discordBackend.service.AuthService;
 import jakarta.validation.Valid;
@@ -21,20 +22,20 @@ public class AuthController {
     }
 
     @PostMapping(value = {"/login", "/signin"})
-    public ResponseEntity<LoginResDto> login(@RequestBody LoginReqDto loginDto){
-        LoginResDto response = authService.login(loginDto);
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginReqDto loginDto){
+        ApiResponse response = authService.login(loginDto);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = {"/register", "/signup"})
-    public ResponseEntity<RegisterResDto> register(@Valid @RequestBody RegisterReqDto registerDto){
-        RegisterResDto response = authService.register(registerDto);
+    public ResponseEntity<ApiResponse> register(@Valid @RequestBody RegisterReqDto registerDto){
+        ApiResponse response = authService.register(registerDto);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResDto> getUser(Authentication authentication) {
-        UserResDto response = authService.getUser(authentication);
+    public ResponseEntity<ApiResponse> getUser(Authentication authentication) {
+        ApiResponse response = authService.getUser(authentication);
         return ResponseEntity.ok(response);
     }
 }

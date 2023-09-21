@@ -1,5 +1,6 @@
 package com.example.discordBackend.service.impl;
 
+import com.example.discordBackend.dtos.ApiResponse;
 import com.example.discordBackend.dtos.auth.*;
 import com.example.discordBackend.exception.DiscordException;
 import com.example.discordBackend.models.User;
@@ -48,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResDto login(LoginReqDto loginDto) {
+    public ApiResponse login(LoginReqDto loginDto) {
         UsernamePasswordAuthenticationToken authenticationToken
                 = new UsernamePasswordAuthenticationToken(
                 loginDto.getEmail(),
@@ -58,11 +59,11 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtTokenProvider.generateToken(authentication);
-        return new LoginResDto(token);
+        return new ApiResponse(new LoginResDto(token), null);
     }
 
     @Override
-    public RegisterResDto register(RegisterReqDto registerDto) {
+    public ApiResponse register(RegisterReqDto registerDto) {
         if(registerDto.getPassword().length() < 6){
             throw new DiscordException(HttpStatus.BAD_REQUEST, "invalid password");
         }
@@ -84,15 +85,15 @@ public class AuthServiceImpl implements AuthService {
 
         user = userRepo.save(user);
 
-        return sendToken(user);
+        return new ApiResponse(sendToken(user), null);
     }
 
     @Override
-    public UserResDto getUser(Authentication authentication) {
+    public ApiResponse getUser(Authentication authentication) {
         String email = authentication.getName();
         var user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new DiscordException(HttpStatus.NOT_FOUND, String.format("user with email %s not found", email)));
-        return mapper.map(user, UserResDto.class);
+        return new ApiResponse(mapper.map(user, UserResDto.class), null);
     }
 
     private RegisterResDto sendToken(User user){

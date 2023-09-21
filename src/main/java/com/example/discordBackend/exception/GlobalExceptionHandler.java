@@ -1,6 +1,7 @@
 package com.example.discordBackend.exception;
 
-import com.example.discordBackend.dtos.ErrorDetails;
+import com.example.discordBackend.dtos.ApiResponse;
+import com.example.discordBackend.dtos.ErrorInfo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,38 +33,40 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DiscordException.class)
-    public ResponseEntity<ErrorDetails> handleCampApiException(
+    public ResponseEntity<ApiResponse> handleDiscordApiException(
             DiscordException exception,
             WebRequest webRequest
     ){
-        ErrorDetails errorDetails =
-                new ErrorDetails(new Date(), exception.getMessage(),
-                        webRequest.getDescription(false));
-
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+        ApiResponse apiResponse = new ApiResponse(
+                null,
+                new ErrorInfo("", exception.getMessage())
+        );
+        return new ResponseEntity<>(apiResponse, exception.getStatus());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorDetails> handleAccessDeniedException(
+    public ResponseEntity<ApiResponse> handleAccessDeniedException(
             AccessDeniedException exception,
             WebRequest webRequest
     ){
-        ErrorDetails errorDetails =
-                new ErrorDetails(new Date(), exception.getMessage(),
-                        webRequest.getDescription(false));
+        ApiResponse apiResponse = new ApiResponse(
+                null,
+                new ErrorInfo("", exception.getMessage())
+        );
 
-        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDetails> handleGlobalException(
+    public ResponseEntity<ApiResponse> handleGlobalException(
             Exception exception,
             WebRequest webRequest
     ){
-        ErrorDetails errorDetails =
-                new ErrorDetails(new Date(), exception.getMessage(),
-                        webRequest.getDescription(false));
+        ApiResponse apiResponse = new ApiResponse(
+                null,
+                new ErrorInfo("", exception.getMessage())
+        );
 
-        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
