@@ -22,10 +22,10 @@ public class FriendInvitation {
     private String id;
 
     @DocumentReference
-    private User senderId;
+    private User sender;
 
     @DocumentReference
-    private User receiverId;
+    private User receiver;
 
     @CreatedDate
     private LocalDateTime createdOn;
@@ -35,8 +35,8 @@ public class FriendInvitation {
 
     public FriendInvitation(){}
 
-    public FriendInvitation(User senderId, User receiverId){
-        this.senderId = senderId;
-        this.receiverId = receiverId;
+    public FriendInvitation(User sender, User receiver) {
+        this.sender = sender;
+        this.receiver = receiver;
     }
 }

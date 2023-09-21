@@ -1,10 +1,7 @@
 package com.example.discordBackend.service.impl;
 
 import com.example.discordBackend.dtos.ApiResponse;
-import com.example.discordBackend.dtos.friendInvitation.InviteResDto;
-import com.example.discordBackend.dtos.friendInvitation.AcceptReqDto;
-import com.example.discordBackend.dtos.friendInvitation.InviteReqDto;
-import com.example.discordBackend.dtos.friendInvitation.RejectReqDto;
+import com.example.discordBackend.dtos.friendInvitation.*;
 import com.example.discordBackend.exception.DiscordException;
 import com.example.discordBackend.models.FriendInvitation;
 import com.example.discordBackend.models.User;
@@ -42,7 +39,7 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
         User targetUser = userRepo.findByEmail(targetEmail)
                 .orElseThrow(() -> new DiscordException(HttpStatus.NOT_FOUND, String.format("User with email %s not found. please check mail address", targetEmail)));
 
-        boolean invitationAlreadyReceived = friendInvitationRepo.findBySenderIdAndReceiverId(user.getId(), targetUser.getId()).isPresent();
+        boolean invitationAlreadyReceived = friendInvitationRepo.findBySenderAndReceiver(user, targetUser).isPresent();
         if(invitationAlreadyReceived){
             throw new DiscordException(HttpStatus.CONFLICT, "Invitation has already been sent");
         }
@@ -62,11 +59,34 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
 
     @Override
     public ApiResponse accept(AcceptReqDto acceptReqDto, Authentication authentication) {
-        return null;
+        FriendInvitation invitation = friendInvitationRepo.findById(acceptReqDto.getId())
+                .orElseThrow(() -> new DiscordException(HttpStatus.UNAUTHORIZED, "Error occured. Please try again"));
+
+        User sender = invitation.getSender();
+        User receiver = invitation.getReceiver();
+
+        sender.getFriends().add(receiver);
+        receiver.getFriends().add(sender);
+
+        sender = userRepo.save(sender);
+        receiver = userRepo.save(receiver);
+
+        friendInvitationRepo.delete(invitation);
+
+        // todo ->
+
+        return new ApiResponse(new AcceptResDto("Invitation successfully accepted"), null);
     }
 
     @Override
     public ApiResponse reject(RejectReqDto rejectReqDto, Authentication authentication) {
-        return null;
+        var invitationExists = friendInvitationRepo.existsById(rejectReqDto.getId());
+        if(invitationExists){
+            friendInvitationRepo.deleteById(rejectReqDto.getId());
+        }
+
+        // todo ->
+
+        return new ApiResponse(new RejectResDto("Invitation successfully rejected"), null);
     }
 }

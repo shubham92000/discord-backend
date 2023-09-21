@@ -8,5 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class RejectReqDto {
-
+    private String id;
 }
