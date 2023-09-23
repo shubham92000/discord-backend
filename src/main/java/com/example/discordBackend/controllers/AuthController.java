@@ -31,7 +31,9 @@ public class AuthController {
 
     @PostMapping(value = {"/register", "/signup"})
     public ResponseEntity<ApiResponse> register(@Valid @RequestBody RegisterReqDto registerDto){
+        log.info("register req: "+registerDto);
         ApiResponse response = authService.register(registerDto);
+        log.info("register res: "+response);
         return ResponseEntity.ok(response);
     }
 

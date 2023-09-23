@@ -1,5 +1,6 @@
 package com.example.discordBackend.dtos.friendInvitation;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Getter
@@ -8,5 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class RejectReqDto {
+    @NotEmpty
     private String id;
 }

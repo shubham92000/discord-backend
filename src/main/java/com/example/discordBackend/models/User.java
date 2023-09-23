@@ -31,8 +31,6 @@ public class User {
     @Indexed(unique = true)
     private String username;
 
-    private String name;
-
     private String password;
 
     private List<Role> roles;

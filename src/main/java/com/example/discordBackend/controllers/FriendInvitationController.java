@@ -6,6 +6,7 @@ import com.example.discordBackend.dtos.friendInvitation.AcceptReqDto;
 import com.example.discordBackend.dtos.friendInvitation.InviteReqDto;
 import com.example.discordBackend.dtos.friendInvitation.RejectReqDto;
 import com.example.discordBackend.service.FriendInvitationService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -27,19 +28,19 @@ public class FriendInvitationController {
     }
 
     @PostMapping("/invite")
-    public ResponseEntity<ApiResponse> invite(@RequestBody InviteReqDto inviteReqDto, Authentication authentication){
+    public ResponseEntity<ApiResponse> invite(@Valid @RequestBody InviteReqDto inviteReqDto, Authentication authentication){
         ApiResponse response = friendInvitationService.invite(inviteReqDto, authentication);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/accept")
-    public ResponseEntity<ApiResponse> accept(@RequestBody AcceptReqDto acceptReqDto, Authentication authentication){
+    public ResponseEntity<ApiResponse> accept(@Valid @RequestBody AcceptReqDto acceptReqDto, Authentication authentication){
         ApiResponse response = friendInvitationService.accept(acceptReqDto, authentication);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/reject")
-    public ResponseEntity<ApiResponse> reject(@RequestBody RejectReqDto rejectReqDto, Authentication authentication){
+    public ResponseEntity<ApiResponse> reject(@Valid @RequestBody RejectReqDto rejectReqDto, Authentication authentication){
         ApiResponse response = friendInvitationService.reject(rejectReqDto, authentication);
         return ResponseEntity.ok(response);
     }

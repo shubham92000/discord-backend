@@ -11,7 +11,8 @@ import lombok.*;
 @ToString
 public class RegisterReqDto {
     @NotEmpty(message = "please give a name")
-    private String name;
+    private String username;
+    @NotEmpty
     private String email;
     @Size(min = 6, message = "password length is too short")
     private String password;
