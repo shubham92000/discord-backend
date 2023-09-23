@@ -1,14 +1,15 @@
 package com.example.discordBackend.dtos.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class LoginResDto {
     private String token;
+    private String email;
+    private String username;
+    private String id;
 }

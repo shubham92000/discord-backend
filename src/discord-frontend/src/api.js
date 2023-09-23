@@ -1,16 +1,17 @@
 import axios from 'axios';
-// import { logout } from './shared/utils/auth';
+import { logout } from './shared/utils/auth';
 
-const apiClient = axios.create({
-	baseURL: 'http://localhost:5002/api',
-	timeout: 1000,
-});
+const apiClient = axios.create({});
 
 apiClient.interceptors.request.use(
 	(config) => {
 		const userDetails = localStorage.getItem('user');
 
-		if (userDetails) {
+		if (
+			userDetails !== null &&
+			userDetails !== undefined &&
+			userDetails !== 'undefined'
+		) {
 			const token = userDetails ? JSON.parse(userDetails).token : null;
 			if (token) {
 				config.headers.Authorization = `Bearer ${token}`;
@@ -26,22 +27,26 @@ apiClient.interceptors.request.use(
 
 export const login = async (data) => {
 	try {
-		return await apiClient.post('/auth/login', data);
+		return await apiClient.post('/api/auth/login', data);
 	} catch (err) {
+		// pass msg
+		console.log('err: ', err);
 		return {
 			error: true,
 			err,
+			msg: errorMsg(err),
 		};
 	}
 };
 
 export const register = async (data) => {
 	try {
-		return await apiClient.post('/auth/register', data);
+		return await apiClient.post('/api/auth/register', data);
 	} catch (err) {
 		return {
 			error: true,
 			err,
+			msg: errorMsg(err),
 		};
 	}
 };
@@ -49,36 +54,39 @@ export const register = async (data) => {
 // secure routes
 export const sendFriendInvitation = async (data) => {
 	try {
-		return await apiClient.post('/friend-invitation/invite', data);
+		return await apiClient.post('/api/friend-invitation/invite', data);
 	} catch (err) {
-		checkResponseCode(err);
+		// checkResponseCode(err);
 		return {
 			error: true,
 			err,
+			msg: errorMsg(err),
 		};
 	}
 };
 
 export const acceptFriendInvitation = async (data) => {
 	try {
-		return await apiClient.post('/friend-invitation/accept', data);
+		return await apiClient.post('/api/friend-invitation/accept', data);
 	} catch (err) {
-		checkResponseCode(err);
+		// checkResponseCode(err);
 		return {
 			error: true,
 			err,
+			msg: errorMsg(err),
 		};
 	}
 };
 
 export const rejectFriendInvitation = async (data) => {
 	try {
-		return await apiClient.post('/friend-invitation/reject', data);
+		return await apiClient.post('/api/friend-invitation/reject', data);
 	} catch (err) {
-		checkResponseCode(err);
+		// checkResponseCode(err);
 		return {
 			error: true,
 			err,
+			msg: errorMsg(err),
 		};
 	}
 };
@@ -87,6 +95,19 @@ const checkResponseCode = (exception) => {
 	const responseCode = exception ? exception.response.status : null;
 
 	if (responseCode && responseCode === 401 && responseCode === 403) {
-		// logout();
+		logout();
 	}
+};
+
+const errorMsg = (err) => {
+	let msg = '';
+	// check if api failure
+	if (err.response?.data?.status === false) {
+		msg = err.response.data.error.message;
+	}
+	// check if server failure
+	else {
+		msg = 'Internal Server Error';
+	}
+	return msg;
 };

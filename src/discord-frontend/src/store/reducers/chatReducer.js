@@ -1,15 +1,24 @@
-import { authActions } from '../actions/authActions';
+import { chatActions } from '../actions/chatActions';
 
 const initState = {
-	userDetails: null,
+	chosenChatDetails: null,
+	chatType: null,
+	messages: [],
 };
 
 const reducer = (state = initState, action) => {
 	switch (action.type) {
-		case authActions.SET_USER_DETAILS:
+		case chatActions.SET_CHOSEN_CHAT_DETAILS:
 			return {
 				...state,
-				userDetails: action.userDetails,
+				chosenChatDetails: action.chatDetails,
+				chatType: action.chatType,
+				messages: [],
+			};
+		case chatActions.SET_MESSAGES:
+			return {
+				...state,
+				messages: action.messages,
 			};
 		default:
 			return state;

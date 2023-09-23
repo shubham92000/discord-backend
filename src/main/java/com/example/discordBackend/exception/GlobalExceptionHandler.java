@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -23,13 +24,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        Map<String, String> errors = new HashMap<>();
+        TreeMap<String, String> errors = new TreeMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError)error).getField();
             String message = error.getDefaultMessage();
             errors.put(fieldName, message);
         });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        var err = errors.pollFirstEntry();
+        return new ResponseEntity<>(new ApiResponse(false, null, new ErrorInfo(
+                "", String.format("%s %s", err.getKey(), err.getValue())
+        )), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DiscordException.class)
@@ -38,6 +42,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest webRequest
     ){
         ApiResponse apiResponse = new ApiResponse(
+                false,
                 null,
                 new ErrorInfo("", exception.getMessage())
         );
@@ -50,6 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest webRequest
     ){
         ApiResponse apiResponse = new ApiResponse(
+                false,
                 null,
                 new ErrorInfo("", exception.getMessage())
         );
@@ -63,6 +69,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest webRequest
     ){
         ApiResponse apiResponse = new ApiResponse(
+                false,
                 null,
                 new ErrorInfo("", exception.getMessage())
         );

@@ -58,8 +58,11 @@ public class AuthServiceImpl implements AuthService {
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        User user = userRepo.findByEmail(loginDto.getEmail())
+                .orElseThrow(() -> new DiscordException(HttpStatus.NOT_FOUND, "email not found"));
+
         String token = jwtTokenProvider.generateToken(authentication);
-        return new ApiResponse(new LoginResDto(token), null);
+        return new ApiResponse(true, new LoginResDto(token, user.getEmail(), user.getUsername(), user.getId()), null);
     }
 
     @Override
@@ -84,8 +87,9 @@ public class AuthServiceImpl implements AuthService {
         user.setRoles(List.of(role));
 
         user = userRepo.save(user);
+        String token = sendToken(user);
 
-        return new ApiResponse(sendToken(user), null);
+        return new ApiResponse(true, new RegisterResDto(token, user.getEmail(), user.getUsername(), user.getId()), null);
     }
 
     @Override
@@ -93,10 +97,10 @@ public class AuthServiceImpl implements AuthService {
         String email = authentication.getName();
         var user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new DiscordException(HttpStatus.NOT_FOUND, String.format("user with email %s not found", email)));
-        return new ApiResponse(mapper.map(user, UserResDto.class), null);
+        return new ApiResponse(true, mapper.map(user, UserResDto.class), null);
     }
 
-    private RegisterResDto sendToken(User user){
+    private String sendToken(User user){
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -105,8 +109,6 @@ public class AuthServiceImpl implements AuthService {
                 userDetails.getAuthorities()
         );
 
-        String token = jwtTokenProvider.generateToken(authenticationToken);
-
-        return new RegisterResDto(token);
+        return jwtTokenProvider.generateToken(authenticationToken);
     }
 }

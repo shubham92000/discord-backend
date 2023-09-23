@@ -19,6 +19,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         ApiResponse apiResponse = new ApiResponse(
+                false,
                 null,
                 new ErrorInfo("", "something went wrong")
         );

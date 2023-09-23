@@ -25,10 +25,11 @@ const login = (userDetails, navigate) => {
 	return async (dispatch) => {
 		const response = await api.login(userDetails);
 		if (response.error) {
-			console.log(response);
-			dispatch(openAlertMessage(response.err.response.data));
+			console.log('response: ', response);
+			dispatch(openAlertMessage(response.msg));
 		} else {
-			const { userDetails } = response.data;
+			// const { userDetails } = response.data;
+			const userDetails = response.data.data;
 			localStorage.setItem('user', JSON.stringify(userDetails));
 			dispatch(setUserDetails(userDetails));
 			navigate('/dashboard', { replace: true });
@@ -40,10 +41,11 @@ const register = (userDetails, navigate) => {
 	return async (dispatch) => {
 		const response = await api.register(userDetails);
 		if (response.error) {
-			console.log(response);
-			dispatch(openAlertMessage(response.err.response.data));
+			console.log('response: ', response);
+			dispatch(openAlertMessage(response.msg));
 		} else {
-			const { userDetails } = response.data;
+			// const { userDetails } = response.data;
+			const userDetails = response.data.data;
 			localStorage.setItem('user', JSON.stringify(userDetails));
 			dispatch(setUserDetails(userDetails));
 			navigate('/dashboard', { replace: true });

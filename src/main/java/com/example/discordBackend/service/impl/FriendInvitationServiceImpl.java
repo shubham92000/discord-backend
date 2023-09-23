@@ -54,7 +54,7 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
 
         // todo -> send invitations via web socket
 
-        return new ApiResponse(new InviteResDto("Invitation has been sent"), null);
+        return new ApiResponse(true, new InviteResDto("Invitation has been sent"), null);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
 
         // todo ->
 
-        return new ApiResponse(new AcceptResDto("Invitation successfully accepted"), null);
+        return new ApiResponse(true, new AcceptResDto("Invitation successfully accepted"), null);
     }
 
     @Override
@@ -87,6 +87,6 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
 
         // todo ->
 
-        return new ApiResponse(new RejectResDto("Invitation successfully rejected"), null);
+        return new ApiResponse(true, new RejectResDto("Invitation successfully rejected"), null);
     }
 }

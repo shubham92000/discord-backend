@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class ApiResponse {
+    private Boolean status;
     private Object data;
     private ErrorInfo error;
 }
