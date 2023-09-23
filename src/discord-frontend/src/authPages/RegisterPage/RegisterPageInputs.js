@@ -24,7 +24,7 @@ const RegisterPageInputs = (props) => {
 				setValue={setPassword}
 				label="password"
 				type="password"
-				placeholder="Enter e-mail address"
+				placeholder="Enter Password"
 			/>
 		</>
 	);

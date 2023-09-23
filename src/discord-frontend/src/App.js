@@ -17,7 +17,8 @@ function App() {
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
-					<Route path="/" element={<div>Login</div>} />
+					<Route path="/" element={<div>Home</div>} />
+					<Route path="*" element={<div>Not Found</div>} />
 				</Routes>
 			</Router>
 			<AlertNotification />
