@@ -48,10 +48,10 @@ public class SecurityConfig {
                 .headers(x -> x.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests((authorize) ->
                         authorize
+                                .requestMatchers("/api/**").authenticated()
                                 .requestMatchers("/api/auth/login").permitAll()
                                 .requestMatchers("/api/auth/register").permitAll()
-                                .requestMatchers("/socket/**").authenticated()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 .exceptionHandling(ex ->
                         ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -68,7 +68,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .requestMatchers("/static/**")
+//                .requestMatchers("classpath:/static/**")
 //                .requestMatchers("/index.html")
 //                .requestMatchers("/app.js")
 //                .requestMatchers("/main.css")
