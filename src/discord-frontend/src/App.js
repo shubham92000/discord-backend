@@ -9,6 +9,7 @@ import './App.css';
 import LoginPage from './authPages/LoginPages/LoginPage';
 import AlertNotification from './shared/components/AlertNotification';
 import RegisterPage from './authPages/RegisterPage/RegisterPage';
+import Dashboard from './Dashboard/Dashboard';
 
 function App() {
 	return (
@@ -17,7 +18,7 @@ function App() {
 				<Routes>
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
-					<Route path="/" element={<div>Home</div>} />
+					<Route path="/dashboard" element={<Dashboard />} />
 					<Route path="*" element={<div>Not Found</div>} />
 				</Routes>
 			</Router>

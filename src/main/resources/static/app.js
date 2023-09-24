@@ -46,7 +46,7 @@ function sendName() {
     console.log('start')
     stompClient.publish({
         destination: "/app/direct-message",
-        body: JSON.stringify({'receiverUserId': '123', 'content': 'sfgsd'})
+        body: JSON.stringify({'receiverUserId': '123', 'content': $("#name").val()})
     });
     console.log('end')
 }

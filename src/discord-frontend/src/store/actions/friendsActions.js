@@ -21,7 +21,7 @@ const sendFriendInvitation = (data, closeDialogHandler) => {
 	return async (dispatch) => {
 		const response = await api.sendFriendInvitation(data);
 		if (response.error) {
-			dispatch(openAlertMessage(response.err.response.data));
+			dispatch(openAlertMessage(response.msg));
 		} else {
 			dispatch(openAlertMessage('Invitation has been sent!'));
 			closeDialogHandler();
