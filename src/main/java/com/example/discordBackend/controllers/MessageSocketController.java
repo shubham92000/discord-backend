@@ -6,6 +6,7 @@ import com.example.discordBackend.service.MessageSocketService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
 import static com.example.discordBackend.utils.WebsocketTopics.*;
@@ -14,23 +15,18 @@ import static com.example.discordBackend.utils.WebsocketTopics.*;
 public class MessageSocketController {
 
     private MessageSocketService messageSocketService;
-    private SimpMessagingTemplate simpMessagingTemplate;
 
-    public MessageSocketController(MessageSocketService messageSocketService, SimpMessagingTemplate simpMessagingTemplate) {
+    public MessageSocketController(MessageSocketService messageSocketService) {
         this.messageSocketService = messageSocketService;
-        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     @MessageMapping(directMessage)
-//    @SendTo(topic+greetings)
-    public void directMessage(DirectMessage message){
-        this.simpMessagingTemplate.convertAndSend(topic+greetings, messageSocketService.directMessage(message));
-//        return messageSocketService.directMessage(message);
+    public void directMessage(DirectMessage message, Authentication authentication){
+        messageSocketService.directMessage(message, authentication);
     }
 
-//    @MessageMapping(directChatHistory)
-//    @SendTo(topic+directChatHistory)
-//    public String directChatHistory(DirectChatHistory directChatHistory){
-//        return messageSocketService.directChatHistory(directChatHistory);
-//    }
+    @MessageMapping(directChatHistory)
+    public void directChatHistory(DirectChatHistory directChatHistory, Authentication authentication){
+        messageSocketService.directChatHistory(directChatHistory, authentication);
+    }
 }
