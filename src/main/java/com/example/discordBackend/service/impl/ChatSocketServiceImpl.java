@@ -7,11 +7,13 @@ import com.example.discordBackend.repos.ConversationRepo;
 import com.example.discordBackend.service.ChatSocketService;
 import com.example.discordBackend.service.SocketStore;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 import static com.example.discordBackend.utils.WebsocketTopics.directChatHistory;
 
+@Service
 public class ChatSocketServiceImpl implements ChatSocketService {
     private ConversationRepo conversationRepo;
     private SimpMessagingTemplate simpMessagingTemplate;

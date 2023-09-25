@@ -48,9 +48,9 @@ public class SecurityConfig {
                 .headers(x -> x.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests((authorize) ->
                         authorize
-                                .requestMatchers("/api/**").authenticated()
                                 .requestMatchers("/api/auth/login").permitAll()
                                 .requestMatchers("/api/auth/register").permitAll()
+                                .requestMatchers("/api/**").authenticated()
                                 .anyRequest().permitAll()
                 )
                 .exceptionHandling(ex ->

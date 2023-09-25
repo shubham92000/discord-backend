@@ -4,9 +4,9 @@ import lombok.*;
 
 @Getter
 @Setter
-//@NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class DirectChatHistory {
-
+    private String message;
 }

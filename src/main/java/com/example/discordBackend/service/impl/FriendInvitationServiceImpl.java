@@ -8,6 +8,7 @@ import com.example.discordBackend.models.User;
 import com.example.discordBackend.repos.FriendInvitationRepo;
 import com.example.discordBackend.repos.UserRepo;
 import com.example.discordBackend.service.FriendInvitationService;
+import com.example.discordBackend.service.FriendSocketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,12 @@ import java.util.Objects;
 public class FriendInvitationServiceImpl implements FriendInvitationService {
     private UserRepo userRepo;
     private FriendInvitationRepo friendInvitationRepo;
+    private FriendSocketService friendSocketService;
 
-    public FriendInvitationServiceImpl(UserRepo userRepo, FriendInvitationRepo friendInvitationRepo) {
+    public FriendInvitationServiceImpl(UserRepo userRepo, FriendInvitationRepo friendInvitationRepo, FriendSocketService friendSocketService) {
         this.userRepo = userRepo;
         this.friendInvitationRepo = friendInvitationRepo;
+        this.friendSocketService = friendSocketService;
     }
 
     @Override
@@ -52,7 +55,7 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
         FriendInvitation newInvitation = new FriendInvitation(user, targetUser);
         newInvitation = friendInvitationRepo.save(newInvitation);
 
-        // todo -> send invitations via web socket
+        friendSocketService.updateFriendsPendingInvitations(targetUser.getEmail());
 
         return new ApiResponse(true, new InviteResDto("Invitation has been sent"), null);
     }
@@ -60,7 +63,7 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
     @Override
     public ApiResponse accept(AcceptReqDto acceptReqDto, Authentication authentication) {
         FriendInvitation invitation = friendInvitationRepo.findById(acceptReqDto.getId())
-                .orElseThrow(() -> new DiscordException(HttpStatus.UNAUTHORIZED, "Error occured. Please try again"));
+                .orElseThrow(() -> new DiscordException(HttpStatus.NOT_FOUND, "Error occured. Please try again"));
 
         User sender = invitation.getSender();
         User receiver = invitation.getReceiver();
@@ -73,7 +76,12 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
 
         friendInvitationRepo.delete(invitation);
 
-        // todo ->
+        // update list of pending invitations for receiver
+        friendSocketService.updateFriendsPendingInvitations(receiver.getEmail());
+
+        // update list of friends for both sender and receiver
+        friendSocketService.updateFriends(receiver.getEmail());
+        friendSocketService.updateFriends(sender.getEmail());
 
         return new ApiResponse(true, new AcceptResDto("Invitation successfully accepted"), null);
     }
@@ -85,7 +93,8 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
             friendInvitationRepo.deleteById(rejectReqDto.getId());
         }
 
-        // todo ->
+        // update the list of pending invitations for this user
+        friendSocketService.updateFriendsPendingInvitations(authentication.getName());
 
         return new ApiResponse(true, new RejectResDto("Invitation successfully rejected"), null);
     }

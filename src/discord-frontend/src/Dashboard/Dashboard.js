@@ -7,8 +7,8 @@ import AppBar from './AppBar/AppBar';
 import { logout } from '../shared/utils/auth';
 import { connect } from 'react-redux';
 import { getAction } from '../store/actions/authActions';
-// import { connectWithSocketServer } from '../realtimeCommunication/socketConnection';
-// import Room from './Room/Room';
+import { getsocketActions } from '../store/actions/socketActions';
+import { connectWithSocketServer } from '../realtimeCommunication/socketConnection';
 
 const Wrapper = styled('div')({
 	width: '100%',
@@ -16,16 +16,28 @@ const Wrapper = styled('div')({
 	display: 'flex',
 });
 
-const Dashboard = ({ setUserDetails, isUserInRoom }) => {
+const Dashboard = ({
+	fetchSocketId,
+	setUserDetails,
+	socketId,
+	userDetails,
+}) => {
 	useEffect(() => {
-		const userDetails = localStorage.getItem('user');
-		if (!userDetails) {
+		const userDetailsInJson = localStorage.getItem('user');
+		if (!userDetailsInJson) {
 			logout();
 		} else {
-			setUserDetails(JSON.parse(userDetails));
-			// connectWithSocketServer(JSON.parse(userDetails));
+			const userData = JSON.parse(userDetailsInJson);
+			setUserDetails(userData);
+			fetchSocketId({ email: userData.email });
 		}
 	}, []);
+
+	useEffect(() => {
+		if (socketId !== null) {
+			connectWithSocketServer(userDetails, socketId);
+		}
+	}, [socketId]);
 
 	return (
 		<Wrapper>
@@ -38,15 +50,17 @@ const Dashboard = ({ setUserDetails, isUserInRoom }) => {
 	);
 };
 
-const mapStateToProps = ({ room }) => {
+const mapStateToProps = ({ socket, auth }) => {
 	return {
-		...room,
+		...socket,
+		...auth,
 	};
 };
 
 const mapActionsToProps = (dispatch) => {
 	return {
 		...getAction(dispatch),
+		...getsocketActions(dispatch),
 	};
 };
 

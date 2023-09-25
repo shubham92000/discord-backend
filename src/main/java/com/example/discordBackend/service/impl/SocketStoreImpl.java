@@ -3,11 +3,23 @@ package com.example.discordBackend.service.impl;
 import com.example.discordBackend.dtos.ApiResponse;
 import com.example.discordBackend.dtos.socketStore.*;
 import com.example.discordBackend.service.SocketStore;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.example.discordBackend.utils.WebsocketTopics.greetings;
+import static com.example.discordBackend.utils.WebsocketTopics.topic;
+
+@Service
 public class SocketStoreImpl implements SocketStore {
     Map<SocketId, UserDetails> activeConnections = new HashMap<>();
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    public SocketStoreImpl(SimpMessagingTemplate simpMessagingTemplate) {
+        this.simpMessagingTemplate = simpMessagingTemplate;
+    }
 
     @Override
     public ApiResponse generateSocketId(GenerateSocketIdReqDto generateSocketIdReqDto) {
@@ -44,7 +56,7 @@ public class SocketStoreImpl implements SocketStore {
     public ApiResponse getActiveSocketConnections(GetActiveConnectionsReqDto getActiveConnectionsReqDto) {
         List<String> sockets = new ArrayList<>();
         activeConnections.forEach((k,v) -> {
-            if(v.getEmail() == getActiveConnectionsReqDto.getEmail()){
+            if(Objects.equals(v.getEmail(), getActiveConnectionsReqDto.getEmail())){
                 sockets.add(k.getId());
             }
         });
@@ -62,5 +74,24 @@ public class SocketStoreImpl implements SocketStore {
                 new GetOnlineUsersResDto(new ArrayList<>()),
                 null
         );
+    }
+
+    @Override
+    public ApiResponse subscribeComplete(Authentication authentication) {
+//        this.simpMessagingTemplate.convertAndSend("/topic/greetings2", "greetings2");
+//
+//        var email = authentication.getName();
+//
+//        var response = getActiveSocketConnections(new GetActiveConnectionsReqDto(email));
+//        var sockets = ((GetActiveConnectionsResDto)response.getData()).getSockets();
+//
+//        System.out.println("email: "+email);
+//        System.out.println("sockets size :"+sockets.size());
+//        sockets.forEach(socket -> {
+//            System.out.println("socket: "+socket);
+//            simpMessagingTemplate.convertAndSendToUser(socket, "/topic/greetings", "greetings-user");
+//        });
+
+        return new ApiResponse(true, null, null);
     }
 }

@@ -26,7 +26,7 @@ public class MessageSocketController {
     }
 
     @MessageMapping(directChatHistory)
-    public void directChatHistory(DirectChatHistory directChatHistory, Authentication authentication){
-        messageSocketService.directChatHistory(directChatHistory, authentication);
+    public void directChatHistory(DirectChatHistory chatHistory, Authentication authentication){
+        messageSocketService.directChatHistory(chatHistory, authentication);
     }
 }

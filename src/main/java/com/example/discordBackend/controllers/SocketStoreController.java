@@ -8,10 +8,8 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/socketstore")
@@ -29,6 +27,13 @@ public class SocketStoreController {
         log.info("generatesocketid req: "+generateSocketIdReqDto);
         ApiResponse response = socketStore.generateSocketId(generateSocketIdReqDto);
         log.info("generatesocketid res: "+response);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/subscribe-complete")
+    public ResponseEntity<ApiResponse> subscribeComplete(Authentication authentication){
+        log.info("subscribeComplete req: ");
+        ApiResponse response = socketStore.subscribeComplete(authentication);
         return ResponseEntity.ok(response);
     }
 }
