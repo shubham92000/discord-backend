@@ -34,6 +34,13 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 		// });
 
 		stompClient.subscribe(
+			`/user/${socketId}/topic/conversation-ids`,
+			(data) => {
+				console.log('conversation-ids :', data.body);
+			}
+		);
+
+		stompClient.subscribe(
 			`/user/${socketId}/topic/friends-invitations`,
 			(data) => {
 				console.log('friends-invitations :', data.body);

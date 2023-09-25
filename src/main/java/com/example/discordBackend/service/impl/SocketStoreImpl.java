@@ -78,6 +78,8 @@ public class SocketStoreImpl implements SocketStore {
 
     @Override
     public ApiResponse subscribeComplete(Authentication authentication) {
+//        todo -> emit onlineusers when user subscribes
+
 //        this.simpMessagingTemplate.convertAndSend("/topic/greetings2", "greetings2");
 //
 //        var email = authentication.getName();

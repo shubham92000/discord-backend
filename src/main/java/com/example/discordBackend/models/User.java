@@ -38,6 +38,9 @@ public class User {
     @DocumentReference
     private List<User> friends = new ArrayList<>();
 
+    @DocumentReference
+    private List<Conversation> conversations = new ArrayList<>();
+
     @CreatedDate
     private LocalDateTime createdOn;
 

@@ -6,6 +6,7 @@ public class WebsocketTopics {
     public static final String friendsList = "/friends-list";
     public static final String directMessage = "/direct-message";
     public static final String directChatHistory = "/direct-chat-history";
+    public static final String conversationIds = "/conversation-ids";
 
     public static final String greetings = "/greetings";
 }
