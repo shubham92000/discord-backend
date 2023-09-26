@@ -42,7 +42,7 @@ public class FriendSocketServiceImpl implements FriendSocketService {
         var pendingInvitations = friendInvitationRepo.findByReceiver(receiver);
 
         var pendingSenders = pendingInvitations.stream()
-                .map(pi -> new PendingSender(pi.getSender().getId(), pi.getSender().getUsername(), pi.getSender().getEmail()))
+                .map(pi -> new PendingSender(pi.getId(), pi.getSender().getUsername(), pi.getSender().getEmail()))
                 .collect(Collectors.toList());
 
         var response = socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(email));

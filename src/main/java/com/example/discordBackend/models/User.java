@@ -10,7 +10,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,11 +34,15 @@ public class User {
 
     private List<Role> roles;
 
-    @DocumentReference
-    private List<User> friends = new ArrayList<>();
+//    @DocumentReference
+//    private List<User> friends = new ArrayList<>();
+//
+//    @DocumentReference
+//    private List<Conversation> conversations = new ArrayList<>();
 
-    @DocumentReference
-    private List<Conversation> conversations = new ArrayList<>();
+    private List<GroupConversationDetail> groupConversationDetails = new ArrayList<>();
+
+    private List<DirectConversationDetail> directConversationDetails = new ArrayList<>();
 
     @CreatedDate
     private LocalDateTime createdOn;

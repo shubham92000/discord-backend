@@ -43,7 +43,10 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 		stompClient.subscribe(
 			`/user/${socketId}/topic/friends-invitations`,
 			(data) => {
+				// msg body as json string
 				console.log('friends-invitations :', data.body);
+				const pendingInvitations = JSON.parse(data.body);
+				store.dispatch(setPendingFriendsInvitations(pendingInvitations));
 			}
 		);
 
