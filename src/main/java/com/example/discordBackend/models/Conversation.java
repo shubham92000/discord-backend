@@ -1,5 +1,6 @@
 package com.example.discordBackend.models;
 
+import com.example.discordBackend.utils.ConversationType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,10 @@ public class Conversation {
 
     @DocumentReference
     private List<Message> messages = new ArrayList<>();
+
+    private ConversationType type;
+
+    private String groupId;
 
     @CreatedDate
     private LocalDateTime createdOn;

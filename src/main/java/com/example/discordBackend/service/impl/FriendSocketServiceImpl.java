@@ -5,6 +5,7 @@ import com.example.discordBackend.dtos.socketStore.GetActiveConnectionsReqDto;
 import com.example.discordBackend.dtos.socketStore.GetActiveConnectionsResDto;
 import com.example.discordBackend.dtos.socketStore.PendingSender;
 import com.example.discordBackend.exception.DiscordException;
+import com.example.discordBackend.models.ConversationDetail;
 import com.example.discordBackend.repos.FriendInvitationRepo;
 import com.example.discordBackend.repos.UserRepo;
 import com.example.discordBackend.service.FriendSocketService;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.discordBackend.utils.WebsocketTopics.*;
@@ -56,7 +59,7 @@ public class FriendSocketServiceImpl implements FriendSocketService {
      * @param email
      */
     @Override
-    public void updateFriends(String email) {
+    public void updateConversations(String email) {
         var response = socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(email));
         var sockets = ((GetActiveConnectionsResDto) response.getData()).getSockets();
 
@@ -65,10 +68,10 @@ public class FriendSocketServiceImpl implements FriendSocketService {
         var user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new DiscordException(HttpStatus.NOT_FOUND, String.format("user with %s not found", email)));
 
-        // list of friends for this user (email)
-        var friends = user.getFriends().stream().map(f -> new Friend(f.getId(), f.getEmail(), f.getUsername()))
-                        .collect(Collectors.toList());
+        List<ConversationDetail> conversations = new ArrayList<>();
+        conversations.addAll(user.getDirectConversationDetails());
+        conversations.addAll(user.getGroupConversationDetails());
 
-        sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+friendsList, friends));
+        sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+conversationList, conversations));
     }
 }

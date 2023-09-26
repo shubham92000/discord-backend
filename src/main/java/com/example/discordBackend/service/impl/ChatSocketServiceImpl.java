@@ -54,17 +54,17 @@ public class ChatSocketServiceImpl implements ChatSocketService {
     @Override
     public boolean sendConversations(String email) {
         // send all conversation_id to user ( email )
-        var user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new DiscordException(HttpStatus.NOT_FOUND, String.format("user with email %s not found", email)));
-
-        var conversationIdList = user.getConversations().stream()
-                .map(conversation -> conversation.getId())
-                .collect(Collectors.toList());
-
-        var response = socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(user.getEmail()));
-        var sockets = ((GetActiveConnectionsResDto) response.getData()).getSockets();
-
-        sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+conversationIds, conversationIdList));
+//        var user = userRepo.findByEmail(email)
+//                .orElseThrow(() -> new DiscordException(HttpStatus.NOT_FOUND, String.format("user with email %s not found", email)));
+//
+//        var conversationIdList = user.getConversations().stream()
+//                .map(conversation -> conversation.getId())
+//                .collect(Collectors.toList());
+//
+//        var response = socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(user.getEmail()));
+//        var sockets = ((GetActiveConnectionsResDto) response.getData()).getSockets();
+//
+//        sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+conversationIds, conversationIdList));
 
         return true;
     }

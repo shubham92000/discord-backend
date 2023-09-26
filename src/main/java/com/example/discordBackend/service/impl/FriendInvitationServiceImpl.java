@@ -3,15 +3,14 @@ package com.example.discordBackend.service.impl;
 import com.example.discordBackend.dtos.ApiResponse;
 import com.example.discordBackend.dtos.friendInvitation.*;
 import com.example.discordBackend.exception.DiscordException;
-import com.example.discordBackend.models.Conversation;
-import com.example.discordBackend.models.FriendInvitation;
-import com.example.discordBackend.models.User;
+import com.example.discordBackend.models.*;
 import com.example.discordBackend.repos.ConversationRepo;
 import com.example.discordBackend.repos.FriendInvitationRepo;
 import com.example.discordBackend.repos.UserRepo;
 import com.example.discordBackend.service.ChatSocketService;
 import com.example.discordBackend.service.FriendInvitationService;
 import com.example.discordBackend.service.FriendSocketService;
+import com.example.discordBackend.utils.ConversationType;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,8 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
             throw new DiscordException(HttpStatus.CONFLICT, "Invitation has already been sent");
         }
 
-        var userAlreadyFriends = targetUser.getFriends().contains(user.getId());
+        var userAlreadyFriends = targetUser.getDirectConversationDetails().stream()
+                .anyMatch((conversation) -> Objects.equals(user.getId(), conversation.getUserDetail().getUserId()));
         if(userAlreadyFriends){
             throw new DiscordException(HttpStatus.CONFLICT, "Friend already added. Please check friend list");
         }
@@ -76,16 +76,23 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
         User sender = invitation.getSender();
         User receiver = invitation.getReceiver();
 
-        sender.getFriends().add(receiver);
-        receiver.getFriends().add(sender);
-
         // create conversation for this sender and receiver
         var newConversation = new Conversation();
         newConversation.setParticipants(List.of(sender, receiver));
+        newConversation.setType(ConversationType.DIRECT);
         newConversation = conversationRepo.save(newConversation);
 
-        sender.getConversations().add(newConversation);
-        receiver.getConversations().add(newConversation);
+        sender.getDirectConversationDetails().add(new DirectConversationDetail(
+                newConversation.getId(),
+                ConversationType.DIRECT,
+                new UserDetail(receiver.getId(), receiver.getUsername(), receiver.getEmail())
+        ));
+
+        receiver.getDirectConversationDetails().add(new DirectConversationDetail(
+                newConversation.getId(),
+                ConversationType.DIRECT,
+                new UserDetail(sender.getId(), sender.getUsername(), sender.getEmail())
+        ));
 
         sender = userRepo.save(sender);
         receiver = userRepo.save(receiver);
@@ -95,13 +102,9 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
         // update list of pending invitations for receiver
         friendSocketService.updateFriendsPendingInvitations(receiver.getEmail());
 
-        // update list of friends for both sender and receiver
-        friendSocketService.updateFriends(receiver.getEmail());
-        friendSocketService.updateFriends(sender.getEmail());
-
-        // send the total list of conversation_ids to both sender and user
-        chatSocketService.sendConversations(sender.getEmail());
-        chatSocketService.sendConversations(receiver.getEmail());
+        // updates list of conversations for both sender and receiver
+        friendSocketService.updateConversations(sender.getEmail());
+        friendSocketService.updateConversations(receiver.getEmail());
 
         return new ApiResponse(true, new AcceptResDto("Invitation successfully accepted"), null);
     }

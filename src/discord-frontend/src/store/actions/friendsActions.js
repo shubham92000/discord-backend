@@ -2,7 +2,7 @@ import { openAlertMessage } from './alertActions';
 import * as api from '../../api';
 
 export const friendsAction = {
-	SET_FRIENDS: 'FRIENDS.SET_FRIENDS',
+	SET_CONVERSATION_LIST: 'FRIENDS.SET_CONVERSATION_LIST',
 	SET_PENDING_FRIENDS_INVITATION: 'FRIENDS.SET_PENDING_FRIENDS_INVITATION',
 	SET_ONLINE_USERS: 'FRIENDS.SET_ONLINE_USERS',
 };
@@ -13,7 +13,8 @@ export const getActions = (dispatch) => {
 			dispatch(sendFriendInvitation(data, closeDialogHandler)),
 		acceptFriendInvitation: (data) => dispatch(acceptFriendInvitation(data)),
 		rejectFriendInvitation: (data) => dispatch(rejectFriendInvitation(data)),
-		setFriends: (data) => dispatch(setFriends(data)),
+		setConversationList: (conversationList) =>
+			dispatch(setConversationList(conversationList)),
 	};
 };
 
@@ -58,10 +59,10 @@ const rejectFriendInvitation = (data) => {
 	};
 };
 
-export const setFriends = (friends) => {
+export const setConversationList = (conversationList) => {
 	return {
-		type: friendsAction.SET_FRIENDS,
-		friends,
+		type: friendsAction.SET_CONVERSATION_LIST,
+		conversationList,
 	};
 };
 

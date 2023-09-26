@@ -1,6 +1,6 @@
 import {
 	setPendingFriendsInvitations,
-	setFriends,
+	setConversationList,
 	setOnlineUsers,
 } from '../store/actions/friendsActions';
 // import { updateDirectChatHistoryIfActive } from '../shared/utils/chat';
@@ -33,12 +33,12 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 		// 	console.log('greetings :', data.body);
 		// });
 
-		stompClient.subscribe(
-			`/user/${socketId}/topic/conversation-ids`,
-			(data) => {
-				console.log('conversation-ids :', data.body);
-			}
-		);
+		// stompClient.subscribe(
+		// 	`/user/${socketId}/topic/conversation-ids`,
+		// 	(data) => {
+		// 		console.log('conversation-ids :', data.body);
+		// 	}
+		// );
 
 		stompClient.subscribe(
 			`/user/${socketId}/topic/friends-invitations`,
@@ -50,9 +50,19 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 			}
 		);
 
-		stompClient.subscribe(`/user/${socketId}/topic/friends-list`, (data) => {
-			console.log('friends-list :', data.body);
-		});
+		// stompClient.subscribe(`/user/${socketId}/topic/friends-list`, (data) => {
+		// 	console.log('friends-list :', data.body);
+		// store.dispatch(setFriends(friends));
+		// });
+
+		stompClient.subscribe(
+			`/user/${socketId}/topic/conversation-list`,
+			(data) => {
+				console.log('conversation-list :', data.body);
+				const conversationList = JSON.parse(data.body);
+				store.dispatch(setConversationList(conversationList));
+			}
+		);
 
 		stompClient.subscribe(`/user/${socketId}/topic/online-users`, (data) => {
 			console.log('online-users :', data.body);

@@ -1,7 +1,7 @@
 import { friendsAction } from '../actions/friendsActions';
 
 const initState = {
-	friends: [],
+	conversationList: [],
 	pendingFriendsInvitations: [],
 	onlineUsers: [],
 };
@@ -13,10 +13,10 @@ const reducer = (state = initState, action) => {
 				...state,
 				pendingFriendsInvitations: action.pendingFriendsInvitations,
 			};
-		case friendsAction.SET_FRIENDS:
+		case friendsAction.SET_CONVERSATION_LIST:
 			return {
 				...state,
-				friends: action.friends,
+				conversationList: action.conversationList,
 			};
 		case friendsAction.SET_ONLINE_USERS:
 			return {
