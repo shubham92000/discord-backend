@@ -18,12 +18,12 @@ public class MessageSocketController {
         this.messageSocketService = messageSocketService;
     }
 
-    @MessageMapping(message)
+    @MessageMapping(messageTopic)
     public void directMessage(MessagePayload message, Authentication authentication){
         messageSocketService.message(message, authentication);
     }
 
-    @MessageMapping(chatHistory)
+    @MessageMapping(chatHistoryTopic)
     public void chatHistory(UpdateChatHistory updateChatHistory, Authentication authentication){
         messageSocketService.updateChatHistory(updateChatHistory.getConversationId(), updateChatHistory.getToSpecifiedSocketId());
     }

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
-import static com.example.discordBackend.utils.WebsocketTopics.chatHistory;
+import static com.example.discordBackend.utils.WebsocketTopics.chatHistoryTopic;
 
 @Service
 public class MessageSocketServiceImpl implements MessageSocketService {
@@ -66,7 +66,7 @@ public class MessageSocketServiceImpl implements MessageSocketService {
                 .orElseThrow();
 
         if(toSpecifiedSocketId != null){
-            simpMessagingTemplate.convertAndSendToUser(toSpecifiedSocketId, chatHistory, new com.example.discordBackend.dtos.socketStore.ChatHistory(new ArrayList<>(), new ArrayList<>()));
+            simpMessagingTemplate.convertAndSendToUser(toSpecifiedSocketId, chatHistoryTopic, new com.example.discordBackend.dtos.socketStore.ChatHistory(new ArrayList<>(), new ArrayList<>()));
             return true;
         }
 
@@ -74,7 +74,7 @@ public class MessageSocketServiceImpl implements MessageSocketService {
             var response = socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(user.getEmail()));
             var sockets = ((GetActiveConnectionsResDto) response.getData()).getSockets();
 
-            sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, chatHistory, new ChatHistory(new ArrayList<>(), new ArrayList<>())));
+            sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, chatHistoryTopic, new ChatHistory(new ArrayList<>(), new ArrayList<>())));
         });
 
         return true;

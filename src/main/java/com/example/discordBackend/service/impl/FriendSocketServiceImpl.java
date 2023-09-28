@@ -1,6 +1,5 @@
 package com.example.discordBackend.service.impl;
 
-import com.example.discordBackend.dtos.socketStore.Friend;
 import com.example.discordBackend.dtos.socketStore.GetActiveConnectionsReqDto;
 import com.example.discordBackend.dtos.socketStore.GetActiveConnectionsResDto;
 import com.example.discordBackend.dtos.socketStore.PendingSender;
@@ -51,7 +50,7 @@ public class FriendSocketServiceImpl implements FriendSocketService {
         var response = socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(email));
         var sockets = ((GetActiveConnectionsResDto) response.getData()).getSockets();
 
-        sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+friendsInvitations, pendingSenders));
+        sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+ friendsInvitationsTopic, pendingSenders));
     }
 
     /**
@@ -72,6 +71,6 @@ public class FriendSocketServiceImpl implements FriendSocketService {
         conversations.addAll(user.getDirectConversationDetails());
         conversations.addAll(user.getGroupConversationDetails());
 
-        sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+conversationList, conversations));
+        sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+ conversationListTopic, conversations));
     }
 }
