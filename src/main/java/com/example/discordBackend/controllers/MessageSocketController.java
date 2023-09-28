@@ -1,11 +1,9 @@
 package com.example.discordBackend.controllers;
 
-import com.example.discordBackend.dtos.message.DirectChatHistory;
-import com.example.discordBackend.dtos.message.DirectMessage;
+import com.example.discordBackend.dtos.message.UpdateChatHistory;
+import com.example.discordBackend.dtos.message.MessagePayload;
 import com.example.discordBackend.service.MessageSocketService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 
@@ -20,13 +18,13 @@ public class MessageSocketController {
         this.messageSocketService = messageSocketService;
     }
 
-    @MessageMapping(directMessage)
-    public void directMessage(DirectMessage message, Authentication authentication){
-        messageSocketService.directMessage(message, authentication);
+    @MessageMapping(message)
+    public void directMessage(MessagePayload message, Authentication authentication){
+        messageSocketService.message(message, authentication);
     }
 
-    @MessageMapping(directChatHistory)
-    public void directChatHistory(DirectChatHistory chatHistory, Authentication authentication){
-        messageSocketService.directChatHistory(chatHistory, authentication);
+    @MessageMapping(chatHistory)
+    public void chatHistory(UpdateChatHistory updateChatHistory, Authentication authentication){
+        messageSocketService.updateChatHistory(updateChatHistory.getConversationId(), updateChatHistory.getToSpecifiedSocketId());
     }
 }

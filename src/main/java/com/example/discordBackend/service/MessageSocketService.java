@@ -1,10 +1,9 @@
 package com.example.discordBackend.service;
 
-import com.example.discordBackend.dtos.message.DirectChatHistory;
-import com.example.discordBackend.dtos.message.DirectMessage;
+import com.example.discordBackend.dtos.message.MessagePayload;
 import org.springframework.security.core.Authentication;
 
 public interface MessageSocketService {
-    String directMessage(DirectMessage message, Authentication authentication);
-    String directChatHistory(DirectChatHistory directChatHistory, Authentication authentication);
+    String message(MessagePayload messagePayload, Authentication authentication);
+    boolean updateChatHistory(String conversationId, String toSpecifiedSocketId);
 }

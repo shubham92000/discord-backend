@@ -5,9 +5,9 @@ public class WebsocketTopics {
 
     public static final String friendsInvitations = "/friends-invitations";
 
-    public static final String directMessage = "/direct-message";
+    public static final String message = "/message";
 
-    public static final String directChatHistory = "/direct-chat-history";
+    public static final String chatHistory = "/chat-history";
 
     public static final String conversationList = "/conversation-list";
 

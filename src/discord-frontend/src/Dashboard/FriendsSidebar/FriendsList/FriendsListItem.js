@@ -4,16 +4,22 @@ import Button from '@mui/material/Button';
 import Avatar from '../../../shared/components/Avatar';
 import { Typography } from '@mui/material';
 import OnlineIndicator from './OnlineIndicator';
-import { chatTypes, getActions } from '../../../store/actions/chatActions';
+import { getActions } from '../../../store/actions/chatActions';
 
-const FriendsListItem = ({ id, username, isOnline, setChosenChatDetails }) => {
+const FriendsListItem = ({
+	id,
+	username,
+	isOnline,
+	setChosenChatDetails,
+	chatType,
+}) => {
 	const handleChooseActiveConversation = () => {
 		setChosenChatDetails(
 			{
-				id,
+				conversationId: id,
 				name: username,
 			},
-			chatTypes.DIRECT
+			chatType
 		);
 	};
 

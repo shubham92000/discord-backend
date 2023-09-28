@@ -7,7 +7,6 @@ import com.example.discordBackend.models.*;
 import com.example.discordBackend.repos.ConversationRepo;
 import com.example.discordBackend.repos.FriendInvitationRepo;
 import com.example.discordBackend.repos.UserRepo;
-import com.example.discordBackend.service.ChatSocketService;
 import com.example.discordBackend.service.FriendInvitationService;
 import com.example.discordBackend.service.FriendSocketService;
 import com.example.discordBackend.utils.ConversationType;
@@ -24,14 +23,12 @@ public class FriendInvitationServiceImpl implements FriendInvitationService {
     private FriendInvitationRepo friendInvitationRepo;
     private FriendSocketService friendSocketService;
     private ConversationRepo conversationRepo;
-    private ChatSocketService chatSocketService;
 
-    public FriendInvitationServiceImpl(UserRepo userRepo, FriendInvitationRepo friendInvitationRepo, FriendSocketService friendSocketService, ConversationRepo conversationRepo, ChatSocketService chatSocketService) {
+    public FriendInvitationServiceImpl(UserRepo userRepo, FriendInvitationRepo friendInvitationRepo, FriendSocketService friendSocketService, ConversationRepo conversationRepo) {
         this.userRepo = userRepo;
         this.friendInvitationRepo = friendInvitationRepo;
         this.friendSocketService = friendSocketService;
         this.conversationRepo = conversationRepo;
-        this.chatSocketService = chatSocketService;
     }
 
     @Override

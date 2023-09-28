@@ -26,8 +26,6 @@ public class Message {
     @DocumentReference
     private User author;
 
-    private String type;
-
     @CreatedDate
     private LocalDateTime createdOn;
 
@@ -36,9 +34,8 @@ public class Message {
 
     public Message(){}
 
-    public Message(String content, User author, String type) {
+    public Message(String content, User author) {
         this.content = content;
         this.author = author;
-        this.type = type;
     }
 }

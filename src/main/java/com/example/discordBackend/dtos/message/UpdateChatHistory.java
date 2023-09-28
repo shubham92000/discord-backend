@@ -7,6 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class DirectChatHistory {
-    private String message;
+public class UpdateChatHistory {
+    private String conversationId;
+    private String toSpecifiedSocketId;
 }

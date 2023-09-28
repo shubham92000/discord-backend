@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class DirectMessage {
-    private String receiverUserId;
+public class MessagePayload {
+    private String conversationId;
     private String content;
 }
