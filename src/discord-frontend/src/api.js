@@ -105,20 +105,6 @@ export const generateSocketId = async (data) => {
 	}
 };
 
-export const subscribeComplete = async () => {
-	try {
-		return await apiClient.get('/api/socketstore/subscribe-complete');
-	} catch (err) {
-		// checkResponseCode(err);
-		console.log('subscribeComplete err: ', err);
-		return {
-			error: true,
-			err,
-			msg: errorMsg(err),
-		};
-	}
-};
-
 const checkResponseCode = (exception) => {
 	const responseCode = exception ? exception.response.status : null;
 

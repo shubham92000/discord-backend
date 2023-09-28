@@ -29,11 +29,4 @@ public class SocketStoreController {
         log.info("generatesocketid res: "+response);
         return ResponseEntity.ok(response);
     }
-
-    @GetMapping("/subscribe-complete")
-    public ResponseEntity<ApiResponse> subscribeComplete(Authentication authentication){
-        log.info("subscribeComplete req: ");
-        ApiResponse response = socketStore.subscribeComplete(authentication);
-        return ResponseEntity.ok(response);
-    }
 }

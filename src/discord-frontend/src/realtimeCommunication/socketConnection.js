@@ -6,9 +6,7 @@ import {
 // import { updateDirectChatHistoryIfActive } from '../shared/utils/chat';
 import store from '../store/store';
 import { Client } from '@stomp/stompjs';
-import { subscribeComplete } from '../api';
 
-let socket = null;
 let stompClient = null;
 
 export const connectWithSocketServer = (userDetails, socketId) => {
@@ -22,23 +20,7 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 
 	stompClient.onConnect = (frame) => {
 		console.log('Connected: ' + frame);
-
-		// stompClient.subscribe(`/topic/greetings2`, (data) => {
-		// 	console.log('greetings :', data);
-		// 	console.log('greetings :', data.body);
-		// });
-
-		// stompClient.subscribe(`/user/${socketId}/topic/greetings`, (data) => {
-		// 	console.log('greetings :', data);
-		// 	console.log('greetings :', data.body);
-		// });
-
-		// stompClient.subscribe(
-		// 	`/user/${socketId}/topic/conversation-ids`,
-		// 	(data) => {
-		// 		console.log('conversation-ids :', data.body);
-		// 	}
-		// );
+		console.log('store: ', store.getState());
 
 		stompClient.subscribe(
 			`/user/${socketId}/topic/friends-invitations`,
@@ -49,11 +31,6 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 				store.dispatch(setPendingFriendsInvitations(pendingInvitations));
 			}
 		);
-
-		// stompClient.subscribe(`/user/${socketId}/topic/friends-list`, (data) => {
-		// 	console.log('friends-list :', data.body);
-		// store.dispatch(setFriends(friends));
-		// });
 
 		stompClient.subscribe(
 			`/user/${socketId}/topic/conversation-list`,
@@ -86,32 +63,6 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 	};
 
 	stompClient.activate();
-
-	subscribeComplete();
-
-	// socket.on('connect', () => {
-	// 	console.log('successfully connected with socket io server');
-	// 	console.log(socket.id);
-	// });
-
-	// socket.on('friends-invitations', (data) => {
-	// 	const { pendingInvitations } = data;
-	// 	store.dispatch(setPendingFriendsInvitations(pendingInvitations));
-	// });
-
-	// socket.on('friends-list', (data) => {
-	// 	const { friends } = data;
-	// 	store.dispatch(setFriends(friends));
-	// });
-
-	// socket.on('online-users', (data) => {
-	// 	const { onlineUsers } = data;
-	// 	store.dispatch(setOnlineUsers(onlineUsers));
-	// });
-
-	// socket.on('direct-chat-history', (data) => {
-	// 	updateDirectChatHistoryIfActive(data);
-	// });
 };
 
 export const sendDirectMessage = (data) => {

@@ -10,5 +10,4 @@ public interface SocketStore {
     ApiResponse removeUser(RemoveUserReqDto removeUserReqDto);
     ApiResponse getActiveSocketConnections(GetActiveConnectionsReqDto getActiveConnectionsReqDto);
     ApiResponse getOnlineUsers(GetOnlineUsersReqDto getOnlineUsersReqDto);
-    ApiResponse subscribeComplete(Authentication authentication);
 }
