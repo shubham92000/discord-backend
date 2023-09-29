@@ -3,7 +3,7 @@ import {
 	setConversationList,
 	setOnlineUsers,
 } from '../store/actions/friendsActions';
-// import { updateDirectChatHistoryIfActive } from '../shared/utils/chat';
+import { updateChatHisoryIfActiveChat } from '../shared/utils/chat';
 import store from '../store/store';
 import { Client } from '@stomp/stompjs';
 
@@ -45,12 +45,11 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 			console.log('online-users :', data.body);
 		});
 
-		stompClient.subscribe(
-			`/user/${socketId}/topic/direct-chat-history`,
-			(data) => {
-				console.log('direct-chat-history :', data.body);
-			}
-		);
+		stompClient.subscribe(`/user/${socketId}/topic/chat-history`, (data) => {
+			console.log('chat-history :', data.body);
+			const conversationDetails = JSON.parse(data.body);
+			updateChatHisoryIfActiveChat(conversationDetails);
+		});
 	};
 
 	stompClient.onWebSocketError = (error) => {
@@ -66,18 +65,17 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 };
 
 export const sendDirectMessage = (data) => {
-	console.log('send direct-message: ', data);
+	console.log('send message: ', data);
 	stompClient.publish({
-		destination: '/app/direct-message',
+		destination: '/app/message',
 		body: JSON.stringify(data),
 	});
 };
 
 export const getDirectChatHistory = (data) => {
-	console.log('send direct-chat-history: ', data);
+	console.log('send chat-history: ', data);
 	stompClient.publish({
-		destination: '/app/direct-chat-history',
+		destination: '/app/chat-history',
 		body: JSON.stringify(data),
 	});
-	// socket.emit('direct-chat-history', data);
 };

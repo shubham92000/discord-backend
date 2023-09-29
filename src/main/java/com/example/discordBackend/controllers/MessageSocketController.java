@@ -25,6 +25,7 @@ public class MessageSocketController {
 
     @MessageMapping(chatHistoryTopic)
     public void chatHistory(UpdateChatHistory updateChatHistory, Authentication authentication){
-        messageSocketService.updateChatHistory(updateChatHistory.getConversationId(), updateChatHistory.getToSpecifiedSocketId());
+        System.out.println("------------ chatHistory");
+        messageSocketService.updateChatHistory(updateChatHistory.getConversationId(), authentication.getName());
     }
 }

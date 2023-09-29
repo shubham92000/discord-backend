@@ -9,5 +9,4 @@ import lombok.*;
 @ToString
 public class UpdateChatHistory {
     private String conversationId;
-    private String toSpecifiedSocketId;
 }

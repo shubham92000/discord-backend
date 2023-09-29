@@ -2,19 +2,19 @@ import React, { useEffect } from 'react';
 import { styled } from '@mui/system';
 import Messages from './Messages/Messages';
 import NewMessageInput from './NewMessageInput';
-// import { getDirectChatHistory } from '../../realtimeCommunication/socketConnection';
+import { getDirectChatHistory } from '../../realtimeCommunication/socketConnection';
 
 const Wrapper = styled('div')({
 	flexGrow: 1,
 });
 
 const MessengerContent = ({ chosenChatDetails }) => {
-	// useEffect(() => {
-	// 	// fetch chat history
-	// 	getDirectChatHistory({
-	// 		receiverUserId: chosenChatDetails.id,
-	// 	});
-	// }, [chosenChatDetails]);
+	useEffect(() => {
+		// fetch chat history
+		getDirectChatHistory({
+			conversationId: chosenChatDetails.conversationId,
+		});
+	}, [chosenChatDetails]);
 	return (
 		<Wrapper>
 			<Messages />

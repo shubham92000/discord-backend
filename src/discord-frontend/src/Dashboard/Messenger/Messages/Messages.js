@@ -29,17 +29,9 @@ const Messages = ({ chosenChatDetails, messages }) => {
 		<MainContainer>
 			<MessagesHeader name={chosenChatDetails ? chosenChatDetails.name : ''} />
 			{messages.map((message, index) => {
-				const sameAuthor =
-					index > 0 &&
-					messages[index].author._id === messages[index - 1].author._id;
+				const sameAuthor = true;
 
-				const sameDay =
-					index > 0 &&
-					convertDateToHumanReadable(new Date(message.date), 'dd/mm/yy') ===
-						convertDateToHumanReadable(
-							new Date(messages[index - 1].date),
-							'dd/mm/yy'
-						);
+				const sameDay = true;
 
 				return (
 					<div key={message._id} style={{ width: '97%' }}>
@@ -53,12 +45,9 @@ const Messages = ({ chosenChatDetails, messages }) => {
 						)}
 						<Message
 							content={message.content}
-							username={message.author.username}
+							username={message.author}
 							sameAuthor={sameAuthor}
-							date={convertDateToHumanReadable(
-								new Date(message.date),
-								'dd/mm/yy'
-							)}
+							date={null}
 							sameDay={sameDay}
 						/>
 					</div>

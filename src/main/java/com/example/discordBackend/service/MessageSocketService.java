@@ -5,5 +5,5 @@ import org.springframework.security.core.Authentication;
 
 public interface MessageSocketService {
     String message(MessagePayload messagePayload, Authentication authentication);
-    boolean updateChatHistory(String conversationId, String toSpecifiedSocketId);
+    boolean updateChatHistory(String conversationId, String toSpecificUser);
 }
