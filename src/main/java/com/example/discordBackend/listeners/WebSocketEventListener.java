@@ -1,4 +1,4 @@
-package com.example.discordBackend.configurations;
+package com.example.discordBackend.listeners;
 
 
 import com.example.discordBackend.service.FriendSocketService;

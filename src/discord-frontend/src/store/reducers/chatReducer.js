@@ -20,6 +20,12 @@ const reducer = (state = initState, action) => {
 				...state,
 				messages: action.messages,
 			};
+		case chatActions.SET_ADD_MESSAGE:
+			// state.messages.push(action.message);
+			return {
+				...state,
+				messages: [...state.messages, action.message],
+			};
 		default:
 			return state;
 	}

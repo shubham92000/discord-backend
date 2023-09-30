@@ -3,7 +3,10 @@ import {
 	setConversationList,
 	setOnlineUsers,
 } from '../store/actions/friendsActions';
-import { updateChatHisoryIfActiveChat } from '../shared/utils/chat';
+import {
+	updateChatHisoryIfActiveChat,
+	updateMessage,
+} from '../shared/utils/chat';
 import store from '../store/store';
 import { Client } from '@stomp/stompjs';
 import { publishTopics, subscribeTopics } from './socketTopics';
@@ -44,8 +47,14 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 			console.log('online-users :', data.body);
 		});
 
+		stompClient.subscribe(subscribeTopics.message(socketId), (data) => {
+			console.log('sub message :', data.body);
+			const messageBody = JSON.parse(data.body);
+			updateMessage(messageBody);
+		});
+
 		stompClient.subscribe(subscribeTopics.chatHistory(socketId), (data) => {
-			console.log('chat-history :', data.body);
+			console.log('sub chat-history :', data.body);
 			const conversationDetails = JSON.parse(data.body);
 			updateChatHisoryIfActiveChat(conversationDetails);
 		});

@@ -1,4 +1,4 @@
-package com.example.discordBackend.dtos.socketStore;
+package com.example.discordBackend.dtos.friendInvitation;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class PendingSender {
+public class PendingSenderResPayload {
     String id;
     String username;
     String email;

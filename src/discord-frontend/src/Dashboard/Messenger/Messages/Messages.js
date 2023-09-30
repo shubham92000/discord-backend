@@ -25,20 +25,29 @@ const convertDateToHumanReadable = (date, format) => {
 };
 
 const Messages = ({ chosenChatDetails, messages }) => {
+	useEffect(() => {}, [messages]);
+
 	return (
 		<MainContainer>
 			<MessagesHeader name={chosenChatDetails ? chosenChatDetails.name : ''} />
 			{messages.map((message, index) => {
-				const sameAuthor = true;
+				const sameAuthor =
+					index > 0 && messages[index].author === messages[index - 1].author;
 
-				const sameDay = true;
+				const sameDay =
+					index > 0 &&
+					convertDateToHumanReadable(new Date(message.datetime), 'dd/mm/yy') ===
+						convertDateToHumanReadable(
+							new Date(messages[index - 1].datetime),
+							'dd/mm/yy'
+						);
 
 				return (
-					<div key={message._id} style={{ width: '97%' }}>
+					<div key={message.id} style={{ width: '97%' }}>
 						{(!sameDay || index === 0) && (
 							<DateSeparator
 								date={convertDateToHumanReadable(
-									new Date(message.date),
+									new Date(message.datetime),
 									'dd/mm/yy'
 								)}
 							/>
@@ -47,7 +56,10 @@ const Messages = ({ chosenChatDetails, messages }) => {
 							content={message.content}
 							username={message.author}
 							sameAuthor={sameAuthor}
-							date={null}
+							date={convertDateToHumanReadable(
+								new Date(message.datetime),
+								'dd/mm/yy'
+							)}
 							sameDay={sameDay}
 						/>
 					</div>

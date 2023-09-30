@@ -1,6 +1,5 @@
-package com.example.discordBackend.dtos.socketStore;
+package com.example.discordBackend.dtos.message;
 
-import com.example.discordBackend.models.User;
 import lombok.*;
 
 @Getter
@@ -8,8 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ChatHistoryMessage {
+public class ChatHistoryMessageResPayload {
     private String id;
     private String content;
     private String author;
+    private String datetime;
 }

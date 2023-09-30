@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class UpdateChatHistory {
+public class chatHistoryReqPayload {
     private String conversationId;
 }

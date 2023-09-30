@@ -1,7 +1,7 @@
 package com.example.discordBackend.controllers;
 
-import com.example.discordBackend.dtos.message.UpdateChatHistory;
-import com.example.discordBackend.dtos.message.MessagePayload;
+import com.example.discordBackend.dtos.message.chatHistoryReqPayload;
+import com.example.discordBackend.dtos.message.MessageReqPayload;
 import com.example.discordBackend.service.MessageSocketService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.security.core.Authentication;
@@ -19,13 +19,12 @@ public class MessageSocketController {
     }
 
     @MessageMapping(messageTopic)
-    public void directMessage(MessagePayload message, Authentication authentication){
+    public void directMessage(MessageReqPayload message, Authentication authentication){
         messageSocketService.message(message, authentication);
     }
 
     @MessageMapping(chatHistoryTopic)
-    public void chatHistory(UpdateChatHistory updateChatHistory, Authentication authentication){
-        System.out.println("------------ chatHistory");
-        messageSocketService.updateChatHistory(updateChatHistory.getConversationId(), authentication.getName());
+    public void chatHistory(chatHistoryReqPayload chatHistoryReqPayload, Authentication authentication){
+        messageSocketService.chatHistory(chatHistoryReqPayload.getConversationId(), authentication.getName());
     }
 }

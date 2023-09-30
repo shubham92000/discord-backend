@@ -11,6 +11,9 @@ export const subscribeTopics = {
 	chatHistory: (socketId) => {
 		return `/user/${socketId}/topic/chat-history`;
 	},
+	message: (socketId) => {
+		return `/user/${socketId}/topic/message`;
+	},
 };
 
 export const publishTopics = {
@@ -18,6 +21,6 @@ export const publishTopics = {
 		return `/app/message`;
 	},
 	chatHistory: () => {
-		return `/app/chat-history;`;
+		return `/app/chat-history`;
 	},
 };

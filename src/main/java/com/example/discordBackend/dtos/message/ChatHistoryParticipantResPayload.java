@@ -1,4 +1,4 @@
-package com.example.discordBackend.dtos.socketStore;
+package com.example.discordBackend.dtos.message;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ChatHistoryParticipant {
+public class ChatHistoryParticipantResPayload {
     private String id;
     private String email;
     private String username;

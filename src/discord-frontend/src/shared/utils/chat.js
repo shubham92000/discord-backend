@@ -1,5 +1,5 @@
 import store from '../../store/store';
-import { setMessage } from '../../store/actions/chatActions';
+import { setAddMessage, setMessage } from '../../store/actions/chatActions';
 
 export const updateChatHisoryIfActiveChat = (data) => {
 	const { conversationId, participants, messages, type, groupId } = data;
@@ -13,5 +13,19 @@ export const updateChatHisoryIfActiveChat = (data) => {
 
 	if (activeConversationId === conversationId) {
 		store.dispatch(setMessage(messages));
+	}
+};
+
+export const updateMessage = (messageBody) => {
+	const { conversationId, message } = messageBody;
+
+	const activeConversationId = store.getState().chat.chosenChatDetails
+		? store.getState().chat.chosenChatDetails.conversationId
+		: null;
+
+	if (activeConversationId === conversationId) {
+		store.dispatch(setAddMessage(message));
+	} else {
+		// display number of new messages for the other chat
 	}
 };

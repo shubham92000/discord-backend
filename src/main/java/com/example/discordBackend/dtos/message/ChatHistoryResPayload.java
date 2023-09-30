@@ -1,4 +1,4 @@
-package com.example.discordBackend.dtos.socketStore;
+package com.example.discordBackend.dtos.message;
 
 import com.example.discordBackend.utils.ConversationType;
 import lombok.*;
@@ -10,10 +10,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ChatHistory {
+public class ChatHistoryResPayload {
     private String conversationId;
-    private List<ChatHistoryParticipant> participants;
-    private List<ChatHistoryMessage> messages;
+    private List<ChatHistoryParticipantResPayload> participants;
+    private List<ChatHistoryMessageResPayload> messages;
     private ConversationType type;
     private String groupId;
 }

@@ -15,6 +15,7 @@ const MessengerContent = ({ chosenChatDetails }) => {
 			conversationId: chosenChatDetails.conversationId,
 		});
 	}, [chosenChatDetails]);
+
 	return (
 		<Wrapper>
 			<Messages />

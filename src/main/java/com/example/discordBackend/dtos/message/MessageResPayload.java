@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class MessagePayload {
+public class MessageResPayload {
     private String conversationId;
-    private String content;
+    private ChatHistoryMessageResPayload message;
 }

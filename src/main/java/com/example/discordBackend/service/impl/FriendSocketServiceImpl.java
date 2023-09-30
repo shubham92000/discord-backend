@@ -2,7 +2,7 @@ package com.example.discordBackend.service.impl;
 
 import com.example.discordBackend.dtos.socketStore.GetActiveConnectionsReqDto;
 import com.example.discordBackend.dtos.socketStore.GetActiveConnectionsResDto;
-import com.example.discordBackend.dtos.socketStore.PendingSender;
+import com.example.discordBackend.dtos.friendInvitation.PendingSenderResPayload;
 import com.example.discordBackend.exception.DiscordException;
 import com.example.discordBackend.models.ConversationDetail;
 import com.example.discordBackend.repos.FriendInvitationRepo;
@@ -44,7 +44,7 @@ public class FriendSocketServiceImpl implements FriendSocketService {
         var pendingInvitations = friendInvitationRepo.findByReceiver(receiver);
 
         var pendingSenders = pendingInvitations.stream()
-                .map(pi -> new PendingSender(pi.getId(), pi.getSender().getUsername(), pi.getSender().getEmail()))
+                .map(pi -> new PendingSenderResPayload(pi.getId(), pi.getSender().getUsername(), pi.getSender().getEmail()))
                 .collect(Collectors.toList());
 
         var response = socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(email));
