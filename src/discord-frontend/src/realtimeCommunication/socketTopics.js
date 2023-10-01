@@ -8,6 +8,9 @@ export const subscribeTopics = {
 	onlineUsers: (socketId) => {
 		return `/user/${socketId}/topic/online-users`;
 	},
+	offlineUsers: (socketId) => {
+		return `/user/${socketId}/topic/offline-users`;
+	},
 	chatHistory: (socketId) => {
 		return `/user/${socketId}/topic/chat-history`;
 	},

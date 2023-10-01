@@ -1,5 +1,6 @@
 import store from '../../store/store';
 import { setAddMessage, setMessage } from '../../store/actions/chatActions';
+import { newMessage } from '../../store/actions/friendsActions';
 
 export const updateChatHisoryIfActiveChat = (data) => {
 	const { conversationId, participants, messages, type, groupId } = data;
@@ -27,5 +28,6 @@ export const updateMessage = (messageBody) => {
 		store.dispatch(setAddMessage(message));
 	} else {
 		// display number of new messages for the other chat
+		store.dispatch(newMessage(conversationId, 1));
 	}
 };

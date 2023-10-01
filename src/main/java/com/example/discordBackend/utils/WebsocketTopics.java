@@ -12,4 +12,6 @@ public class WebsocketTopics {
     public static final String conversationListTopic = "/conversation-list";
 
     public static final String onlineUsersTopic = "/online-users";
+
+    public static final String offlineUsersTopic = "/offline-users";
 }

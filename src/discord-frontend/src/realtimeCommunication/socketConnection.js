@@ -2,6 +2,7 @@ import {
 	setPendingFriendsInvitations,
 	setConversationList,
 	setOnlineUsers,
+	setOfflineUser,
 } from '../store/actions/friendsActions';
 import {
 	updateChatHisoryIfActiveChat,
@@ -15,11 +16,10 @@ let stompClient = null;
 
 export const connectWithSocketServer = (userDetails, socketId) => {
 	const jwtToken = userDetails.token;
-	console.log('token: ', jwtToken);
-	console.log('socketId: ', socketId);
 
 	stompClient = new Client({
 		brokerURL: `ws://localhost:8080/socket?Authorization=Bearer ${jwtToken}`,
+		reconnectDelay: 0,
 	});
 
 	stompClient.onConnect = (frame) => {
@@ -28,7 +28,6 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 		stompClient.subscribe(
 			subscribeTopics.friendInvitations(socketId),
 			(data) => {
-				console.log('friends-invitations :', data.body);
 				const pendingInvitations = JSON.parse(data.body);
 				store.dispatch(setPendingFriendsInvitations(pendingInvitations));
 			}
@@ -37,24 +36,27 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 		stompClient.subscribe(
 			subscribeTopics.conversationList(socketId),
 			(data) => {
-				console.log('conversation-list :', data.body);
 				const conversationList = JSON.parse(data.body);
 				store.dispatch(setConversationList(conversationList));
 			}
 		);
 
 		stompClient.subscribe(subscribeTopics.onlineUsers(socketId), (data) => {
-			console.log('online-users :', data.body);
+			const onlineUsers = JSON.parse(data.body);
+			store.dispatch(setOnlineUsers(onlineUsers));
+		});
+
+		stompClient.subscribe(subscribeTopics.offlineUsers(socketId), (data) => {
+			const offlineUsers = data.body;
+			store.dispatch(setOfflineUser(offlineUsers));
 		});
 
 		stompClient.subscribe(subscribeTopics.message(socketId), (data) => {
-			console.log('sub message :', data.body);
 			const messageBody = JSON.parse(data.body);
 			updateMessage(messageBody);
 		});
 
 		stompClient.subscribe(subscribeTopics.chatHistory(socketId), (data) => {
-			console.log('sub chat-history :', data.body);
 			const conversationDetails = JSON.parse(data.body);
 			updateChatHisoryIfActiveChat(conversationDetails);
 		});
@@ -73,7 +75,6 @@ export const connectWithSocketServer = (userDetails, socketId) => {
 };
 
 export const sendDirectMessage = (data) => {
-	console.log('send message: ', data);
 	stompClient.publish({
 		destination: publishTopics.message(),
 		body: JSON.stringify(data),
@@ -81,7 +82,6 @@ export const sendDirectMessage = (data) => {
 };
 
 export const getDirectChatHistory = (data) => {
-	console.log('send chat-history: ', data);
 	stompClient.publish({
 		destination: publishTopics.chatHistory(),
 		body: JSON.stringify(data),

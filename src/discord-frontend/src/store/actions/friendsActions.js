@@ -5,6 +5,8 @@ export const friendsAction = {
 	SET_CONVERSATION_LIST: 'FRIENDS.SET_CONVERSATION_LIST',
 	SET_PENDING_FRIENDS_INVITATION: 'FRIENDS.SET_PENDING_FRIENDS_INVITATION',
 	SET_ONLINE_USERS: 'FRIENDS.SET_ONLINE_USERS',
+	SET_OFFLINE_USER: 'FRIENDS.SET_OFFLINE_USER',
+	SET_NEW_MESSAGE: 'FRIENDS.SET_NEW_MESSAGE',
 };
 
 export const getActions = (dispatch) => {
@@ -70,5 +72,20 @@ export const setOnlineUsers = (onlineUsers) => {
 	return {
 		type: friendsAction.SET_ONLINE_USERS,
 		onlineUsers,
+	};
+};
+
+export const setOfflineUser = (offlineUser) => {
+	return {
+		type: friendsAction.SET_OFFLINE_USER,
+		offlineUser,
+	};
+};
+
+export const newMessage = (conversationId, totalMessages) => {
+	return {
+		type: friendsAction.SET_NEW_MESSAGE,
+		conversationId,
+		totalMessages,
 	};
 };

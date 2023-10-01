@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from '@mui/system';
 import FriendsListItem from './FriendsListItem';
 import { connect } from 'react-redux';
@@ -10,14 +10,15 @@ const MainContainer = styled('div')({
 
 const checkOnlineUsers = (conversationList = [], onlineUsers = []) => {
 	conversationList.forEach((f) => {
-		f.isOnline = false;
+		f.isOnline = onlineUsers.includes(f.userDetail.email);
 	});
 
-	console.log('return friends', conversationList.length);
 	return conversationList;
 };
 
 const FriendsList = ({ conversationList, onlineUsers }) => {
+	useEffect(() => {}, [conversationList, onlineUsers]);
+
 	return (
 		<MainContainer>
 			{checkOnlineUsers(conversationList, onlineUsers).map((f) => (

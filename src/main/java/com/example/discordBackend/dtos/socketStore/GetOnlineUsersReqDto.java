@@ -5,7 +5,8 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-//@AllArgsConstructor
+@AllArgsConstructor
 @ToString
 public class GetOnlineUsersReqDto {
+    private String email;
 }

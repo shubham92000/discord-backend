@@ -1,6 +1,7 @@
 package com.example.discordBackend.listeners;
 
 
+import com.example.discordBackend.dtos.socketStore.GetOnlineUsersReqDto;
 import com.example.discordBackend.service.FriendSocketService;
 import com.example.discordBackend.service.SocketStore;
 import org.springframework.context.event.EventListener;
@@ -16,13 +17,9 @@ import java.util.Objects;
 
 @Component
 public class WebSocketEventListener {
-    private SimpMessagingTemplate simpMessagingTemplate;
-    private SocketStore socketStore;
     private FriendSocketService friendSocketService;
 
-    public WebSocketEventListener(SimpMessagingTemplate simpMessagingTemplate, SocketStore socketStore, FriendSocketService friendSocketService) {
-        this.simpMessagingTemplate = simpMessagingTemplate;
-        this.socketStore = socketStore;
+    public WebSocketEventListener(FriendSocketService friendSocketService) {
         this.friendSocketService = friendSocketService;
     }
 
@@ -52,9 +49,16 @@ public class WebSocketEventListener {
         }
         else if(paths.length == 5 && Objects.equals(paths[1], "user") && Objects.equals(paths[4], "online-users")){
             System.out.println("online-users");
+            friendSocketService.emitOnlineUsers(email);
         }
     }
 
     @EventListener
-    private void handleSessionDisconnect(SessionDisconnectEvent event) {}
+    private void handleSessionDisconnect(SessionDisconnectEvent event) {
+        SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
+        String email = headers.getUser().getName();
+
+        System.out.println("SessionDisconnectEvent username: "+email);
+        friendSocketService.emitOfflineUsers(email);
+    }
 }

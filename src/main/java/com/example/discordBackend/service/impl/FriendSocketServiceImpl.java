@@ -1,8 +1,11 @@
 package com.example.discordBackend.service.impl;
 
+import com.example.discordBackend.dtos.ApiResponse;
 import com.example.discordBackend.dtos.socketStore.GetActiveConnectionsReqDto;
 import com.example.discordBackend.dtos.socketStore.GetActiveConnectionsResDto;
 import com.example.discordBackend.dtos.friendInvitation.PendingSenderResPayload;
+import com.example.discordBackend.dtos.socketStore.GetOnlineUsersReqDto;
+import com.example.discordBackend.dtos.socketStore.GetOnlineUsersResDto;
 import com.example.discordBackend.exception.DiscordException;
 import com.example.discordBackend.models.ConversationDetail;
 import com.example.discordBackend.repos.FriendInvitationRepo;
@@ -72,5 +75,30 @@ public class FriendSocketServiceImpl implements FriendSocketService {
         conversations.addAll(user.getGroupConversationDetails());
 
         sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+ conversationListTopic, conversations));
+    }
+
+    @Override
+    public void emitOnlineUsers(String email) {
+        var onlineFriendsOfuser = ((GetOnlineUsersResDto) socketStore.getOnlineUsers(new GetOnlineUsersReqDto(email)).getData()).getConnectedUsers();
+
+        var response = socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(email));
+        var sockets = ((GetActiveConnectionsResDto) response.getData()).getSockets();
+
+        sockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+onlineUsersTopic, onlineFriendsOfuser));
+
+        onlineFriendsOfuser.forEach(friend -> {
+            var friendSockets = ((GetActiveConnectionsResDto) socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(friend)).getData()).getSockets();
+            friendSockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+onlineUsersTopic, List.of(email)));
+        });
+    }
+
+    @Override
+    public void emitOfflineUsers(String email) {
+        var onlineFriendsOfUser = ((GetOnlineUsersResDto) socketStore.getOnlineUsers(new GetOnlineUsersReqDto(email)).getData()).getConnectedUsers();
+
+        onlineFriendsOfUser.forEach(friend -> {
+            var friendSockets = ((GetActiveConnectionsResDto) socketStore.getActiveSocketConnections(new GetActiveConnectionsReqDto(friend)).getData()).getSockets();
+            friendSockets.forEach(socket -> simpMessagingTemplate.convertAndSendToUser(socket, topic+offlineUsersTopic, email));
+        });
     }
 }
