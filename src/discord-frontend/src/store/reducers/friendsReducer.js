@@ -33,7 +33,7 @@ const reducer = (state = initState, action) => {
 				onlineUsers: newOnlineUsers,
 			};
 		case friendsAction.SET_NEW_MESSAGE:
-			const unreadMessages = state.newMessages;
+			const unreadMessages = [...state.newMessages];
 			const idx = unreadMessages.findIndex(
 				(entry) => entry.conversationId === action.conversationId
 			);
@@ -49,6 +49,18 @@ const reducer = (state = initState, action) => {
 			return {
 				...state,
 				newMessages: unreadMessages,
+			};
+		case friendsAction.SET_CLEAR_MESSAGE_INDICATOR:
+			const clearMessages = [...state.newMessages];
+			const index = clearMessages.findIndex(
+				(entry) => entry.conversationId === action.conversationId
+			);
+			if (index !== -1) {
+				clearMessages.splice(index, 1);
+			}
+			return {
+				...state,
+				newMessages: clearMessages,
 			};
 		default:
 			return state;

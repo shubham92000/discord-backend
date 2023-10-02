@@ -7,6 +7,7 @@ export const friendsAction = {
 	SET_ONLINE_USERS: 'FRIENDS.SET_ONLINE_USERS',
 	SET_OFFLINE_USER: 'FRIENDS.SET_OFFLINE_USER',
 	SET_NEW_MESSAGE: 'FRIENDS.SET_NEW_MESSAGE',
+	SET_CLEAR_MESSAGE_INDICATOR: 'FRIENDS.SET_CLEAR_MESSAGE_INDICATOR',
 };
 
 export const getActions = (dispatch) => {
@@ -17,6 +18,8 @@ export const getActions = (dispatch) => {
 		rejectFriendInvitation: (data) => dispatch(rejectFriendInvitation(data)),
 		setConversationList: (conversationList) =>
 			dispatch(setConversationList(conversationList)),
+		clearNewMessage: (conversationId) =>
+			dispatch(clearNewMessage(conversationId)),
 	};
 };
 
@@ -87,5 +90,12 @@ export const newMessage = (conversationId, totalMessages) => {
 		type: friendsAction.SET_NEW_MESSAGE,
 		conversationId,
 		totalMessages,
+	};
+};
+
+export const clearNewMessage = (conversationId) => {
+	return {
+		type: friendsAction.SET_CLEAR_MESSAGE_INDICATOR,
+		conversationId,
 	};
 };

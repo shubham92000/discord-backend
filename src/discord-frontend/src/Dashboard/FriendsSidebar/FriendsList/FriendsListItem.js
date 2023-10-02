@@ -5,6 +5,7 @@ import Avatar from '../../../shared/components/Avatar';
 import { Typography } from '@mui/material';
 import OnlineIndicator from './OnlineIndicator';
 import { getActions } from '../../../store/actions/chatActions';
+import { getActions as getFriendActions } from '../../../store/actions/friendsActions';
 
 const FriendsListItem = ({
 	id,
@@ -12,8 +13,11 @@ const FriendsListItem = ({
 	isOnline,
 	setChosenChatDetails,
 	chatType,
+	totalNewMessages,
+	clearNewMessage,
 }) => {
 	const handleChooseActiveConversation = () => {
+		clearNewMessage(id);
 		setChosenChatDetails(
 			{
 				conversationId: id,
@@ -50,6 +54,7 @@ const FriendsListItem = ({
 			>
 				{username}
 			</Typography>
+			{totalNewMessages}
 			{isOnline && <OnlineIndicator />}
 		</Button>
 	);
@@ -58,6 +63,7 @@ const FriendsListItem = ({
 const mapActionsToProps = (dispatch) => {
 	return {
 		...getActions(dispatch),
+		...getFriendActions(dispatch),
 	};
 };
 
