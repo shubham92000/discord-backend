@@ -4,6 +4,7 @@ import { styled } from '@mui/system';
 import MessagesHeader from './MessagesHeader';
 import Message from './Message';
 import DateSeparator from './DateSeparator';
+import { useChatScroll } from '../../../hooks/chat';
 
 const MainContainer = styled('div')({
 	height: 'calc(100% - 60px)',
@@ -25,10 +26,12 @@ const convertDateToHumanReadable = (date, format) => {
 };
 
 const Messages = ({ chosenChatDetails, messages }) => {
+	const ref = useChatScroll(messages);
+
 	useEffect(() => {}, [messages]);
 
 	return (
-		<MainContainer>
+		<MainContainer ref={ref}>
 			<MessagesHeader name={chosenChatDetails ? chosenChatDetails.name : ''} />
 			{messages.map((message, index) => {
 				const sameAuthor =
