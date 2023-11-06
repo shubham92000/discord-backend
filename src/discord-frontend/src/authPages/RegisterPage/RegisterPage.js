@@ -8,13 +8,19 @@ import { connect } from 'react-redux';
 import { getAction } from '../../store/actions/authActions';
 import { useNavigate } from 'react-router-dom';
 
-const RegisterPage = ({ register }) => {
+const RegisterPage = ({ register, userDetails }) => {
 	let navigate = useNavigate();
 	const [mail, setMail] = useState('');
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 
 	const [isFormValid, setIsFormValid] = useState(false);
+
+	useEffect(() => {
+		if (userDetails) {
+			navigate('/dashboard', { replace: true });
+		}
+	}, [userDetails]);
 
 	const handleRegister = () => {
 		register(
@@ -59,10 +65,16 @@ const RegisterPage = ({ register }) => {
 	);
 };
 
+const mapStateToProps = ({ auth }) => {
+	return {
+		...auth,
+	};
+};
+
 const mapActionsToProps = (dispatch) => {
 	return {
 		...getAction(dispatch),
 	};
 };
 
-export default connect(null, mapActionsToProps)(RegisterPage);
+export default connect(mapStateToProps, mapActionsToProps)(RegisterPage);

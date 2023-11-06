@@ -4,7 +4,6 @@ import Sidebar from './Sidebar/Sidebar';
 import FriendsSidebar from './FriendsSidebar/FriendsSidebar';
 import Messenger from './Messenger/Messenger';
 import AppBar from './AppBar/AppBar';
-import { logout } from '../shared/utils/auth';
 import { connect } from 'react-redux';
 import { getAction } from '../store/actions/authActions';
 import { getsocketActions } from '../store/actions/socketActions';
@@ -16,20 +15,10 @@ const Wrapper = styled('div')({
 	display: 'flex',
 });
 
-const Dashboard = ({
-	fetchSocketId,
-	setUserDetails,
-	socketId,
-	userDetails,
-}) => {
+const Dashboard = ({ fetchSocketId, socketId, userDetails }) => {
 	useEffect(() => {
-		const userDetailsInJson = localStorage.getItem('user');
-		if (!userDetailsInJson) {
-			logout();
-		} else {
-			const userData = JSON.parse(userDetailsInJson);
-			setUserDetails(userData);
-			fetchSocketId({ email: userData.email });
+		if (userDetails !== null && userDetails.email !== null) {
+			fetchSocketId({ email: userDetails.email });
 		}
 	}, []);
 

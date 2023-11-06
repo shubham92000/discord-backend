@@ -8,11 +8,17 @@ import { connect } from 'react-redux';
 import { getAction } from '../../store/actions/authActions';
 import { useNavigate } from 'react-router-dom';
 
-const LoginPage = ({ login }) => {
+const LoginPage = ({ login, userDetails }) => {
 	let navigate = useNavigate();
 	const [mail, setMail] = useState('');
 	const [password, setPassword] = useState('');
 	const [isFormValid, setIsFormValid] = useState(false);
+
+	useEffect(() => {
+		if (userDetails) {
+			navigate('/dashboard', { replace: true });
+		}
+	}, [userDetails]);
 
 	useEffect(() => {
 		setIsFormValid(validateLoginForm({ mail, password }));
@@ -42,10 +48,16 @@ const LoginPage = ({ login }) => {
 	);
 };
 
+const mapStateToProps = ({ auth }) => {
+	return {
+		...auth,
+	};
+};
+
 const mapActionsToProps = (dispatch) => {
 	return {
 		...getAction(dispatch),
 	};
 };
 
-export default connect(null, mapActionsToProps)(LoginPage);
+export default connect(mapStateToProps, mapActionsToProps)(LoginPage);
