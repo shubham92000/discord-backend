@@ -6,6 +6,7 @@ import { Typography } from '@mui/material';
 import OnlineIndicator from './OnlineIndicator';
 import { getActions } from '../../../store/actions/chatActions';
 import { getActions as getFriendActions } from '../../../store/actions/friendsActions';
+import TotalNewMessages from './TotalNewMessages';
 
 const FriendsListItem = ({
 	id,
@@ -54,7 +55,7 @@ const FriendsListItem = ({
 			>
 				{username}
 			</Typography>
-			{totalNewMessages}
+			<TotalNewMessages newMessages={totalNewMessages} />
 			{isOnline && <OnlineIndicator />}
 		</Button>
 	);
